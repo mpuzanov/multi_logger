@@ -12,14 +12,15 @@ import (
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
+// Level ...
 type Level int8
 
 const (
-	DebugLevel Level = iota - 1
-	InfoLevel
-	WarnLevel
-	ErrorLevel
-	FatalLevel
+	debugLevel Level = iota - 1
+	infoLevel
+	warnLevel
+	errorLevel
+	fatalLevel
 )
 
 // Logger ...
@@ -56,17 +57,17 @@ func New(Level string) *Logger {
 func ParseLevel(lvl string) (Level, error) {
 	switch strings.ToLower(lvl) {
 	case "fatal":
-		return FatalLevel, nil
+		return fatalLevel, nil
 	case "error":
-		return ErrorLevel, nil
+		return errorLevel, nil
 	case "warn", "warning":
-		return WarnLevel, nil
+		return warnLevel, nil
 	case "info":
-		return InfoLevel, nil
+		return infoLevel, nil
 	case "debug":
-		return DebugLevel, nil
+		return debugLevel, nil
 	}
-	var l Level = DebugLevel
+	var l Level = debugLevel
 	return l, fmt.Errorf("not a valid Level: %q", lvl)
 }
 
@@ -84,63 +85,77 @@ func LoggerFromContext(ctx context.Context) *Logger {
 	if l, ok := ctx.Value(Logger{}).(*Logger); ok {
 		return l
 	}
-	return &Logger{logLevel: DebugLevel, logger: log.Default()}
+	return &Logger{logLevel: debugLevel, logger: log.Default()}
 }
 
 // =============================================
+// Error ...
 func (l *Logger) Error(args ...interface{}) {
 	l.logger.SetPrefix("ERROR: ")
 	l.logger.Println(args...)
 }
+
+// Errorf ...
 func (l *Logger) Errorf(format string, args ...interface{}) {
 	l.logger.SetPrefix("ERROR: ")
 	l.logger.Printf(format, args...)
 }
 
+// Fatal ...
 func (l *Logger) Fatal(args ...interface{}) {
 	l.logger.SetPrefix("[FATAL] ")
 	l.logger.Fatal(args...)
 }
+
+// Fatalf ...
 func (l *Logger) Fatalf(format string, args ...interface{}) {
 	l.logger.SetPrefix("[FATAL] ")
 	l.logger.Fatalf(format, args...)
 }
 
+// Info ...
 func (l *Logger) Info(args ...interface{}) {
-	if l.logLevel >= InfoLevel {
+	if l.logLevel >= infoLevel {
 		l.logger.SetPrefix("[INFO] ")
 		l.logger.Println(args...)
 	}
-
 }
+
+// Infof ...
 func (l *Logger) Infof(format string, args ...interface{}) {
-	if l.logLevel <= InfoLevel {
+	if l.logLevel <= infoLevel {
 		l.logger.SetPrefix("[INFO] ")
 		l.logger.Printf(format, args...)
 	}
 }
 
+// Warn ...
 func (l *Logger) Warn(args ...interface{}) {
-	if l.logLevel <= WarnLevel {
+	if l.logLevel <= warnLevel {
 		l.logger.SetPrefix("[WARN] ")
 		l.logger.Println(args...)
 	}
 }
+
+// Warnf ...
 func (l *Logger) Warnf(format string, args ...interface{}) {
-	if l.logLevel <= WarnLevel {
+	if l.logLevel <= warnLevel {
 		l.logger.SetPrefix("[WARN] ")
 		l.logger.Printf(format, args...)
 	}
 }
 
+// Debug ...
 func (l *Logger) Debug(args ...interface{}) {
-	if l.logLevel <= DebugLevel {
+	if l.logLevel <= debugLevel {
 		l.logger.SetPrefix("[DEBUG] ")
 		l.logger.Println(args...)
 	}
 }
+
+// Debugf ...
 func (l *Logger) Debugf(format string, args ...interface{}) {
-	if l.logLevel <= DebugLevel {
+	if l.logLevel <= debugLevel {
 		l.logger.SetPrefix("[DEBUG] ")
 		l.logger.Printf(format, args...)
 	}

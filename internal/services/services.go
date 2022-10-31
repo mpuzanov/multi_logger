@@ -5,7 +5,7 @@ import (
 	"multi_logger/internal/glogger"
 )
 
-// App...
+// App ...
 type App struct {
 	ctx context.Context
 	log glogger.Logger

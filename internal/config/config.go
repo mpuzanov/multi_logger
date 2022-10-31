@@ -8,10 +8,8 @@ import (
 
 // Config ...
 type Config struct {
-	// уровень логирования
-	Level      string
-	// имя используемого логера
-	LoggerName string
+	Level      string // уровень логирования
+	LoggerName string // имя используемого логера
 }
 
 // LoadConfig reads configuration from file or environment variables.

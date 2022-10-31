@@ -11,6 +11,7 @@ import (
 	lumberjack "gopkg.in/natefinch/lumberjack.v2"
 )
 
+// Logger ...
 type Logger struct {
 	*zap.SugaredLogger //*zap.Logger
 }
@@ -30,6 +31,7 @@ func LoggerFromContext(ctx context.Context) *Logger {
 	return &Logger{zap.L().Sugar()}
 }
 
+// New ...
 func New(logLevel string) *Logger {
 
 	loggerConfig := zap.NewProductionEncoderConfig()
